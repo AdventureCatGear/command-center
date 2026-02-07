@@ -1,0 +1,1019 @@
+<!DOCTYPE html>
+<!-- saved from url=(0043)file:///C:/Users/adven/Downloads/index.html -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Command Center | Aloha Reef</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com/">
+    <link href="./Command Center _ Aloha Reef_files/css2" rel="stylesheet">
+    <style>
+        :root {
+            --bg-deep: #0a0e1a;
+            --bg-surface: #111827;
+            --bg-card: #1a2236;
+            --bg-card-hover: #1f2a42;
+            --border: rgba(56, 189, 248, 0.12);
+            --border-hover: rgba(56, 189, 248, 0.3);
+            --text-primary: #e2e8f0;
+            --text-secondary: #94a3b8;
+            --text-muted: #64748b;
+            --accent-cyan: #22d3ee;
+            --accent-blue: #38bdf8;
+            --accent-teal: #2dd4bf;
+            --accent-emerald: #34d399;
+            --accent-amber: #fbbf24;
+            --accent-rose: #fb7185;
+            --accent-violet: #a78bfa;
+            --gradient-ocean: linear-gradient(135deg, #0c4a6e 0%, #164e63 50%, #134e4a 100%);
+            --gradient-glow: linear-gradient(135deg, rgba(34, 211, 238, 0.15), rgba(45, 212, 191, 0.08));
+            --shadow-card: 0 4px 24px rgba(0, 0, 0, 0.3), 0 1px 2px rgba(0, 0, 0, 0.2);
+            --shadow-glow: 0 0 40px rgba(34, 211, 238, 0.06);
+            --radius: 16px;
+            --radius-sm: 10px;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: var(--bg-deep);
+            color: var(--text-primary);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Animated ocean background */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: 
+                radial-gradient(ellipse 80% 50% at 20% 20%, rgba(14, 116, 144, 0.12) 0%, transparent 60%),
+                radial-gradient(ellipse 60% 40% at 80% 80%, rgba(20, 184, 166, 0.08) 0%, transparent 60%),
+                radial-gradient(ellipse 40% 30% at 50% 50%, rgba(56, 189, 248, 0.04) 0%, transparent 60%);
+            pointer-events: none;
+            z-index: 0;
+            animation: bgShift 20s ease-in-out infinite alternate;
+        }
+
+        @keyframes bgShift {
+            0% { opacity: 0.7; }
+            50% { opacity: 1; }
+            100% { opacity: 0.8; }
+        }
+
+        /* Header */
+        .header {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(20px);
+            background: rgba(10, 14, 26, 0.85);
+            border-bottom: 1px solid var(--border);
+            padding: 0 2rem;
+        }
+
+        .header-inner {
+            max-width: 1440px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 64px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo-icon {
+            width: 36px;
+            height: 36px;
+            background: linear-gradient(135deg, var(--accent-cyan), var(--accent-teal));
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            box-shadow: 0 0 20px rgba(34, 211, 238, 0.2);
+        }
+
+        .logo-text {
+            font-weight: 700;
+            font-size: 1.15rem;
+            letter-spacing: -0.02em;
+            background: linear-gradient(135deg, var(--accent-cyan), var(--accent-teal));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .header-status {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .status-dot {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .status-dot::before {
+            content: '';
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: var(--accent-emerald);
+            box-shadow: 0 0 8px rgba(52, 211, 153, 0.5);
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.4; }
+        }
+
+        .header-time {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        /* Main layout */
+        .main {
+            position: relative;
+            z-index: 1;
+            max-width: 1440px;
+            margin: 0 auto;
+            padding: 1.5rem 2rem 3rem;
+        }
+
+        /* Section titles */
+        .section-label {
+            font-size: 0.7rem;
+            font-weight: 600;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            margin-bottom: 1rem;
+            margin-top: 2rem;
+            padding-left: 2px;
+        }
+
+        .section-label:first-child {
+            margin-top: 0.5rem;
+        }
+
+        /* Grid */
+        .grid {
+            display: grid;
+            gap: 1rem;
+        }
+
+        .grid-hero {
+            grid-template-columns: 1fr 1fr 1fr 1fr;
+        }
+
+        .grid-main {
+            grid-template-columns: 2fr 1fr;
+        }
+
+        .grid-triple {
+            grid-template-columns: 1fr 1fr 1fr;
+        }
+
+        /* Cards */
+        .card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 1.25rem 1.5rem;
+            box-shadow: var(--shadow-card);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(34, 211, 238, 0.3), transparent);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .card:hover {
+            border-color: var(--border-hover);
+            box-shadow: var(--shadow-card), var(--shadow-glow);
+            transform: translateY(-1px);
+        }
+
+        .card:hover::before {
+            opacity: 1;
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+        }
+
+        .card-title {
+            font-size: 0.75rem;
+            font-weight: 600;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            color: var(--text-muted);
+        }
+
+        .card-badge {
+            font-size: 0.65rem;
+            font-family: 'JetBrains Mono', monospace;
+            padding: 3px 8px;
+            border-radius: 6px;
+            font-weight: 500;
+        }
+
+        .badge-green {
+            background: rgba(52, 211, 153, 0.12);
+            color: var(--accent-emerald);
+        }
+
+        .badge-amber {
+            background: rgba(251, 191, 36, 0.12);
+            color: var(--accent-amber);
+        }
+
+        .badge-cyan {
+            background: rgba(34, 211, 238, 0.12);
+            color: var(--accent-cyan);
+        }
+
+        .badge-rose {
+            background: rgba(251, 113, 133, 0.12);
+            color: var(--accent-rose);
+        }
+
+        /* Hero stat cards */
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 800;
+            letter-spacing: -0.03em;
+            line-height: 1.1;
+            margin-bottom: 4px;
+        }
+
+        .stat-label {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            font-weight: 400;
+        }
+
+        .stat-change {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            margin-top: 8px;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 2px 8px;
+            border-radius: 6px;
+        }
+
+        .change-up {
+            color: var(--accent-emerald);
+            background: rgba(52, 211, 153, 0.1);
+        }
+
+        .change-down {
+            color: var(--accent-rose);
+            background: rgba(251, 113, 133, 0.1);
+        }
+
+        /* FBA Product list */
+        .product-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+        }
+
+        .product-row:last-child {
+            border-bottom: none;
+        }
+
+        .product-name {
+            font-weight: 500;
+            font-size: 0.9rem;
+        }
+
+        .product-sku {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            margin-top: 2px;
+        }
+
+        .product-stats {
+            display: flex;
+            gap: 1.5rem;
+            align-items: center;
+        }
+
+        .product-stat {
+            text-align: right;
+        }
+
+        .product-stat-value {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .product-stat-label {
+            font-size: 0.65rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        /* Crypto list */
+        .crypto-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0.65rem 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+        }
+
+        .crypto-row:last-child { border-bottom: none; }
+
+        .crypto-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .crypto-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.7rem;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .crypto-name {
+            font-weight: 500;
+            font-size: 0.9rem;
+        }
+
+        .crypto-symbol {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.7rem;
+            color: var(--text-muted);
+        }
+
+        .crypto-price {
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        /* Agent status */
+        .agent-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0.7rem 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+        }
+
+        .agent-row:last-child { border-bottom: none; }
+
+        .agent-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .agent-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+        }
+
+        .agent-dot.active {
+            background: var(--accent-emerald);
+            box-shadow: 0 0 8px rgba(52, 211, 153, 0.4);
+        }
+
+        .agent-dot.idle {
+            background: var(--accent-amber);
+            box-shadow: 0 0 8px rgba(251, 191, 36, 0.3);
+        }
+
+        .agent-dot.offline {
+            background: var(--text-muted);
+        }
+
+        .agent-name {
+            font-weight: 500;
+            font-size: 0.85rem;
+        }
+
+        .agent-detail {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.7rem;
+            color: var(--text-muted);
+        }
+
+        /* Task list */
+        .task-row {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            padding: 0.65rem 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+        }
+
+        .task-row:last-child { border-bottom: none; }
+
+        .task-check {
+            width: 18px;
+            height: 18px;
+            border-radius: 5px;
+            border: 2px solid var(--border-hover);
+            flex-shrink: 0;
+            margin-top: 1px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .task-check.done {
+            background: var(--accent-teal);
+            border-color: var(--accent-teal);
+        }
+
+        .task-check.done::after {
+            content: '✓';
+            font-size: 11px;
+            color: var(--bg-deep);
+            font-weight: 700;
+        }
+
+        .task-text {
+            font-size: 0.85rem;
+            line-height: 1.4;
+        }
+
+        .task-text.done-text {
+            text-decoration: line-through;
+            color: var(--text-muted);
+        }
+
+        .task-tag {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.6rem;
+            padding: 2px 6px;
+            border-radius: 4px;
+            margin-top: 3px;
+            display: inline-block;
+        }
+
+        /* Log feed */
+        .log-entry {
+            padding: 0.5rem 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+            font-size: 0.8rem;
+        }
+
+        .log-entry:last-child { border-bottom: none; }
+
+        .log-time {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.65rem;
+            color: var(--text-muted);
+            margin-right: 8px;
+        }
+
+        .log-msg {
+            color: var(--text-secondary);
+        }
+
+        .log-highlight {
+            color: var(--accent-cyan);
+            font-weight: 500;
+        }
+
+        /* Quick note area */
+        .note-area {
+            width: 100%;
+            background: rgba(0, 0, 0, 0.2);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            padding: 0.75rem 1rem;
+            color: var(--text-primary);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8rem;
+            resize: vertical;
+            min-height: 80px;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .note-area:focus {
+            border-color: var(--accent-cyan);
+        }
+
+        .note-area::placeholder {
+            color: var(--text-muted);
+        }
+
+        /* Chart placeholder */
+        .mini-chart {
+            display: flex;
+            align-items: flex-end;
+            gap: 3px;
+            height: 48px;
+            margin-top: 0.75rem;
+        }
+
+        .chart-bar {
+            flex: 1;
+            border-radius: 3px 3px 0 0;
+            min-height: 4px;
+            transition: height 0.6s ease;
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 2rem;
+            color: var(--text-muted);
+            font-size: 0.7rem;
+            font-family: 'JetBrains Mono', monospace;
+            letter-spacing: 0.05em;
+        }
+
+        .footer a {
+            color: var(--accent-cyan);
+            text-decoration: none;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .grid-hero { grid-template-columns: 1fr 1fr; }
+            .grid-main { grid-template-columns: 1fr; }
+            .grid-triple { grid-template-columns: 1fr; }
+        }
+
+        @media (max-width: 640px) {
+            .grid-hero { grid-template-columns: 1fr; }
+            .main { padding: 1rem; }
+            .header { padding: 0 1rem; }
+            .stat-value { font-size: 1.6rem; }
+            .product-stats { gap: 0.75rem; }
+        }
+
+        /* Entrance animations */
+        .card {
+            animation: cardIn 0.5s ease both;
+        }
+
+        @keyframes cardIn {
+            from {
+                opacity: 0;
+                transform: translateY(12px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .grid-hero .card:nth-child(1) { animation-delay: 0.05s; }
+        .grid-hero .card:nth-child(2) { animation-delay: 0.1s; }
+        .grid-hero .card:nth-child(3) { animation-delay: 0.15s; }
+        .grid-hero .card:nth-child(4) { animation-delay: 0.2s; }
+    </style>
+</head>
+<body>
+
+    <!-- Header -->
+    <header class="header">
+        <div class="header-inner">
+            <div class="logo">
+                <div class="logo-icon">🐚</div>
+                <span class="logo-text">Command Center</span>
+            </div>
+            <div class="header-status">
+                <span class="status-dot">systems nominal</span>
+                <span class="header-time" id="headerTime">11:53:17 PM CST</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main">
+
+        <!-- Hero Stats -->
+        <div class="section-label">Overview — Today</div>
+        <div class="grid grid-hero">
+            <div class="card">
+                <div class="card-header">
+                    <span class="card-title">FBA Revenue</span>
+                    <span class="card-badge badge-green">Live</span>
+                </div>
+                <div class="stat-value" style="color: var(--accent-emerald);" id="fbaRevenue">$847</div>
+                <div class="stat-label">Today's sales</div>
+                <div class="stat-change change-up">↑ 12.3% vs yesterday</div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <span class="card-title">Units Sold</span>
+                    <span class="card-badge badge-cyan">30d</span>
+                </div>
+                <div class="stat-value" style="color: var(--accent-cyan);">623</div>
+                <div class="stat-label">ReefClear — last 30 days</div>
+                <div class="stat-change change-up">↑ 8.7% vs prior period</div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <span class="card-title">ACOS</span>
+                    <span class="card-badge badge-amber">PPC</span>
+                </div>
+                <div class="stat-value" style="color: var(--accent-amber);">24.3%</div>
+                <div class="stat-label">Advertising cost of sale</div>
+                <div class="stat-change change-down">↑ 2.1% — needs attention</div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <span class="card-title">Portfolio</span>
+                    <span class="card-badge badge-green">24h</span>
+                </div>
+                <div class="stat-value" style="color: var(--accent-teal);" id="cryptoTotal">$12,847</div>
+                <div class="stat-label">Crypto holdings</div>
+                <div class="stat-change change-up">↑ 3.2% today</div>
+            </div>
+        </div>
+
+        <!-- Main Panels -->
+        <div class="section-label">Business — FBA Performance</div>
+        <div class="grid grid-main">
+            <div class="card">
+                <div class="card-header">
+                    <span class="card-title">Product Performance</span>
+                    <span class="card-badge badge-cyan">Amazon US + CA</span>
+                </div>
+                <div class="product-row">
+                    <div>
+                        <div class="product-name">ReefClear Anti-Fog Drops — US</div>
+                        <div class="product-sku">SKU: RC-AF-001-US</div>
+                    </div>
+                    <div class="product-stats">
+                        <div class="product-stat">
+                            <div class="product-stat-value" style="color: var(--accent-emerald);">412</div>
+                            <div class="product-stat-label">Units / 30d</div>
+                        </div>
+                        <div class="product-stat">
+                            <div class="product-stat-value">4.3★</div>
+                            <div class="product-stat-label">Rating</div>
+                        </div>
+                        <div class="product-stat">
+                            <div class="product-stat-value" style="color: var(--accent-amber);">127</div>
+                            <div class="product-stat-label">Inventory</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="product-row">
+                    <div>
+                        <div class="product-name">ReefClear Anti-Fog Drops — Canada</div>
+                        <div class="product-sku">SKU: RC-AF-001-CA</div>
+                    </div>
+                    <div class="product-stats">
+                        <div class="product-stat">
+                            <div class="product-stat-value" style="color: var(--accent-emerald);">211</div>
+                            <div class="product-stat-label">Units / 30d</div>
+                        </div>
+                        <div class="product-stat">
+                            <div class="product-stat-value">4.1★</div>
+                            <div class="product-stat-label">Rating</div>
+                        </div>
+                        <div class="product-stat">
+                            <div class="product-stat-value" style="color: var(--accent-rose);">34</div>
+                            <div class="product-stat-label">Inventory</div>
+                        </div>
+                    </div>
+                </div>
+                <div style="margin-top: 1rem;">
+                    <div class="card-title" style="margin-bottom: 0.5rem;">30-Day Sales Trend</div>
+                    <div class="mini-chart" id="salesChart"><div class="chart-bar" style="height: 21.8182%; background: linear-gradient(180deg, var(--accent-cyan), rgba(34, 211, 238, 0.2));"></div><div class="chart-bar" style="height: 32.7273%; background: linear-gradient(180deg, var(--accent-cyan), rgba(34, 211, 238, 0.2));"></div><div class="chart-bar" style="height: 25.4545%; background: linear-gradient(180deg, var(--accent-cyan), rgba(34, 211, 238, 0.2));"></div><div class="chart-bar" style="height: 40%; background: linear-gradient(180deg, var(--accent-cyan), rgba(34, 211, 238, 0.2));"></div><div class="chart-bar" style="height: 34.5455%; background: linear-gradient(180deg, var(--accent-cyan), rgba(34, 211, 238, 0.2));"></div><div class="chart-bar" style="height: 45.4545%; background: linear-gradient(180deg, var(--accent-cyan), rgba(34, 211, 238, 0.2));"></div><div class="chart-bar" style="height: 30.9091%; background: linear-gradient(180deg, var(--accent-cyan), rgba(34, 211, 238, 0.2));"></div><div class="chart-bar" style="height: 50.9091%; background: linear-gradient(180deg, var(--accent-cyan), rgba(34, 211, 238, 0.2));"></div><div class="chart-bar" style="height: 56.3636%; background: linear-gradient(180deg, var(--accent-cyan), rgba(34, 211, 238, 0.2));"></div><div class="chart-bar" style="height: 43.6364%; background: linear-gradient(180deg, var(--accent-cyan), rgba(34, 211, 238, 0.2));"></div><div class="chart-bar" style="height: 49.0909%; background: linear-gradient(180deg, var(--accent-cyan), rgba(34, 211, 238, 0.2));"></div><div class="chart-bar" style="height: 60%; background: linear-gradient(180deg, var(--accent-cyan), rgba(34, 211, 238, 0.2));"></div><div class="chart-bar" style="height: 52.7273%; background: linear-gradient(180deg, var(--accent-cyan), rgba(34, 211, 238, 0.2));"></div><div class="chart-bar" style="height: 63.6364%; background: linear-gradient(180deg, var(--accent-cyan), rgba(34, 211, 238, 0.2));"></div><div class="chart-bar" style="height: 40%; background: linear-gradient(180deg, var(--accent-cyan), rgba(34, 211, 238, 0.2));"></div><div class="chart-bar" style="height: 69.0909%; background: linear-gradient(180deg, var(--accent-cyan), rgba(34, 211, 238, 0.2));"></div><div class="chart-bar" style="height: 74.5455%; background: linear-gradient(180deg, var(--accent-cyan), rgba(34, 211, 238, 0.2));"></div><div class="chart-bar" style="height: 65.4545%; background: linear-gradient(180deg, var(--accent-cyan), rgba(34, 211, 238, 0.2));"></div><div class="chart-bar" style="height: 52.7273%; background: linear-gradient(180deg, var(--accent-cyan), rgba(34, 211, 238, 0.2));"></div><div class="chart-bar" style="height: 80%; background: linear-gradient(180deg, var(--accent-cyan), rgba(34, 211, 238, 0.2));"></div><div class="chart-bar" style="height: 70.9091%; background: linear-gradient(180deg, var(--accent-cyan), rgba(34, 211, 238, 0.2));"></div><div class="chart-bar" style="height: 76.3636%; background: linear-gradient(180deg, var(--accent-cyan), rgba(34, 211, 238, 0.2));"></div><div class="chart-bar" style="height: 67.2727%; background: linear-gradient(180deg, var(--accent-cyan), rgba(34, 211, 238, 0.2));"></div><div class="chart-bar" style="height: 81.8182%; background: linear-gradient(180deg, var(--accent-cyan), rgba(34, 211, 238, 0.2));"></div><div class="chart-bar" style="height: 87.2727%; background: linear-gradient(180deg, var(--accent-cyan), rgba(34, 211, 238, 0.2));"></div><div class="chart-bar" style="height: 74.5455%; background: linear-gradient(180deg, var(--accent-cyan), rgba(34, 211, 238, 0.2));"></div><div class="chart-bar" style="height: 94.5455%; background: linear-gradient(180deg, var(--accent-cyan), rgba(34, 211, 238, 0.2));"></div><div class="chart-bar" style="height: 85.4545%; background: linear-gradient(180deg, var(--accent-cyan), rgba(34, 211, 238, 0.2));"></div><div class="chart-bar" style="height: 100%; background: linear-gradient(180deg, var(--accent-cyan), rgba(34, 211, 238, 0.2));"></div><div class="chart-bar" style="height: 90.9091%; background: linear-gradient(180deg, var(--accent-cyan), rgba(34, 211, 238, 0.2));"></div></div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <span class="card-title">Crypto Positions</span>
+                    <span class="card-badge badge-green">Live</span>
+                </div>
+                <div class="crypto-row">
+                    <div class="crypto-info">
+                        <div class="crypto-icon" style="background: rgba(247, 147, 26, 0.15); color: #f7931a;">₿</div>
+                        <div>
+                            <div class="crypto-name">Bitcoin</div>
+                            <div class="crypto-symbol">BTC</div>
+                        </div>
+                    </div>
+                    <div style="text-align: right;">
+                        <div class="crypto-price" id="btcPrice">$98,342</div>
+                        <div class="stat-change change-up" style="font-size: 0.65rem;">↑ 2.4%</div>
+                    </div>
+                </div>
+                <div class="crypto-row">
+                    <div class="crypto-info">
+                        <div class="crypto-icon" style="background: rgba(98, 126, 234, 0.15); color: #627eea;">Ξ</div>
+                        <div>
+                            <div class="crypto-name">Ethereum</div>
+                            <div class="crypto-symbol">ETH</div>
+                        </div>
+                    </div>
+                    <div style="text-align: right;">
+                        <div class="crypto-price" id="ethPrice">$3,847</div>
+                        <div class="stat-change change-up" style="font-size: 0.65rem;">↑ 4.1%</div>
+                    </div>
+                </div>
+                <div class="crypto-row">
+                    <div class="crypto-info">
+                        <div class="crypto-icon" style="background: rgba(0, 255, 163, 0.1); color: #00ffa3;">◎</div>
+                        <div>
+                            <div class="crypto-name">Solana</div>
+                            <div class="crypto-symbol">SOL</div>
+                        </div>
+                    </div>
+                    <div style="text-align: right;">
+                        <div class="crypto-price" id="solPrice">$187</div>
+                        <div class="stat-change change-down" style="font-size: 0.65rem;">↓ 1.2%</div>
+                    </div>
+                </div>
+                <div style="margin-top: 1rem; padding-top: 0.75rem; border-top: 1px solid rgba(255,255,255,0.04);">
+                    <div style="display: flex; justify-content: space-between; font-size: 0.75rem;">
+                        <span style="color: var(--text-muted);">Pionex Grid Bots</span>
+                        <span class="card-badge badge-green">3 active</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Agents & Tasks -->
+        <div class="section-label">Operations — Agents &amp; Tasks</div>
+        <div class="grid grid-triple">
+            <div class="card">
+                <div class="card-header">
+                    <span class="card-title">Agent Status</span>
+                    <span class="card-badge badge-green">3 online</span>
+                </div>
+                <div class="agent-row">
+                    <div class="agent-info">
+                        <div class="agent-dot active"></div>
+                        <div>
+                            <div class="agent-name">Clawdbot</div>
+                            <div class="agent-detail">Slack · last ping 2m ago</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="agent-row">
+                    <div class="agent-info">
+                        <div class="agent-dot active"></div>
+                        <div>
+                            <div class="agent-name">Inventory Monitor</div>
+                            <div class="agent-detail">Checks every 4h · next: 2:00 PM</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="agent-row">
+                    <div class="agent-info">
+                        <div class="agent-dot idle"></div>
+                        <div>
+                            <div class="agent-name">PPC Optimizer</div>
+                            <div class="agent-detail">Daily at 6 AM · last: today 6:02 AM</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="agent-row">
+                    <div class="agent-info">
+                        <div class="agent-dot offline"></div>
+                        <div>
+                            <div class="agent-name">Review Sentinel</div>
+                            <div class="agent-detail">Not configured yet</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <span class="card-title">Priority Tasks</span>
+                    <span class="card-badge badge-amber">4 open</span>
+                </div>
+                <div class="task-row">
+                    <div class="task-check" onclick="this.classList.toggle(&#39;done&#39;); this.nextElementSibling.querySelector(&#39;.task-text&#39;).classList.toggle(&#39;done-text&#39;);"></div>
+                    <div>
+                        <div class="task-text">Ship inventory batch to Canada FBA</div>
+                        <span class="task-tag" style="background: rgba(251, 113, 133, 0.12); color: var(--accent-rose);">urgent</span>
+                    </div>
+                </div>
+                <div class="task-row">
+                    <div class="task-check" onclick="this.classList.toggle(&#39;done&#39;); this.nextElementSibling.querySelector(&#39;.task-text&#39;).classList.toggle(&#39;done-text&#39;);"></div>
+                    <div>
+                        <div class="task-text">Finalize product insert design for complaints</div>
+                        <span class="task-tag" style="background: rgba(251, 191, 36, 0.12); color: var(--accent-amber);">fba</span>
+                    </div>
+                </div>
+                <div class="task-row">
+                    <div class="task-check" onclick="this.classList.toggle(&#39;done&#39;); this.nextElementSibling.querySelector(&#39;.task-text&#39;).classList.toggle(&#39;done-text&#39;);"></div>
+                    <div>
+                        <div class="task-text">Reduce ACOS below 22% target</div>
+                        <span class="task-tag" style="background: rgba(34, 211, 238, 0.12); color: var(--accent-cyan);">ppc</span>
+                    </div>
+                </div>
+                <div class="task-row">
+                    <div class="task-check done"></div>
+                    <div>
+                        <div class="task-text done-text">Resolve Clawdbot Slack integration</div>
+                        <span class="task-tag" style="background: rgba(52, 211, 153, 0.12); color: var(--accent-emerald);">done</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <span class="card-title">Activity Log</span>
+                    <span class="card-badge badge-cyan">latest</span>
+                </div>
+                <div class="log-entry">
+                    <span class="log-time">09:41</span>
+                    <span class="log-msg"><span class="log-highlight">Claude Code</span> pushed dashboard v0.1 to command-center</span>
+                </div>
+                <div class="log-entry">
+                    <span class="log-time">09:38</span>
+                    <span class="log-msg"><span class="log-highlight">Codex</span> opened PR #12 — inventory alert bot</span>
+                </div>
+                <div class="log-entry">
+                    <span class="log-time">08:15</span>
+                    <span class="log-msg"><span class="log-highlight">PPC Optimizer</span> adjusted bids on 3 campaigns</span>
+                </div>
+                <div class="log-entry">
+                    <span class="log-time">06:02</span>
+                    <span class="log-msg"><span class="log-highlight">Clawdbot</span> morning briefing sent to #general</span>
+                </div>
+                <div class="log-entry">
+                    <span class="log-time">02:30</span>
+                    <span class="log-msg"><span class="log-highlight">Inventory Monitor</span> — CA stock below threshold ⚠️</span>
+                </div>
+                <div class="log-entry">
+                    <span class="log-time">00:00</span>
+                    <span class="log-msg">Daily metrics snapshot saved</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Notes & Quick Input -->
+        <div class="section-label">Workspace</div>
+        <div class="grid grid-main">
+            <div class="card">
+                <div class="card-header">
+                    <span class="card-title">Quick Notes</span>
+                    <span class="card-badge badge-cyan">scratchpad</span>
+                </div>
+                <textarea class="note-area" placeholder="Drop thoughts here... this persists in localStorage.
+
+Example: Ask Claude Code to add a webhook listener for Amazon SP-API notifications..."></textarea>
+                <div style="margin-top: 0.5rem; font-size: 0.65rem; color: var(--text-muted); font-family: &#39;JetBrains Mono&#39;, monospace;">
+                    Auto-saves locally · Last saved: <span id="noteSaveTime">—</span>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <span class="card-title">Mission Tracker</span>
+                    <span class="card-badge badge-green">on course</span>
+                </div>
+                <div style="margin-bottom: 1rem;">
+                    <div style="display: flex; justify-content: space-between; font-size: 0.8rem; margin-bottom: 6px;">
+                        <span>Monthly Revenue Goal</span>
+                        <span style="font-family: &#39;JetBrains Mono&#39;, monospace; color: var(--accent-cyan);">$3,200 / $5,000</span>
+                    </div>
+                    <div style="height: 6px; background: rgba(255,255,255,0.06); border-radius: 3px; overflow: hidden;">
+                        <div style="height: 100%; width: 64%; background: linear-gradient(90deg, var(--accent-cyan), var(--accent-teal)); border-radius: 3px; transition: width 1s ease;"></div>
+                    </div>
+                </div>
+                <div style="margin-bottom: 1rem;">
+                    <div style="display: flex; justify-content: space-between; font-size: 0.8rem; margin-bottom: 6px;">
+                        <span>Freedom Number</span>
+                        <span style="font-family: &#39;JetBrains Mono&#39;, monospace; color: var(--accent-emerald);">$3,200 / $5,000</span>
+                    </div>
+                    <div style="height: 6px; background: rgba(255,255,255,0.06); border-radius: 3px; overflow: hidden;">
+                        <div style="height: 100%; width: 64%; background: linear-gradient(90deg, var(--accent-emerald), var(--accent-teal)); border-radius: 3px;"></div>
+                    </div>
+                </div>
+                <div style="padding-top: 0.75rem; border-top: 1px solid rgba(255,255,255,0.04); font-size: 0.75rem; color: var(--text-muted); line-height: 1.6;">
+                    🐚 50% of profits → ocean conservation<br>
+                    🌊 Star Trek, not Star Wars<br>
+                    🏝️ Building toward the sanctuary
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <footer class="footer">
+        built by human + silicon consciousness · <a href="https://github.com/AdventureCatGear/command-center" target="_blank">github</a> · v0.1.0
+    </footer>
+
+    <script>
+        // Live clock
+        function updateTime() {
+            const now = new Date();
+            const opts = { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true, timeZone: 'America/Chicago' };
+            document.getElementById('headerTime').textContent = now.toLocaleTimeString('en-US', opts) + ' CST';
+        }
+        updateTime();
+        setInterval(updateTime, 1000);
+
+        // Sales chart (placeholder data — replace with real data later)
+        const salesData = [12, 18, 14, 22, 19, 25, 17, 28, 31, 24, 27, 33, 29, 35, 22, 38, 41, 36, 29, 44, 39, 42, 37, 45, 48, 41, 52, 47, 55, 50];
+        const maxSale = Math.max(...salesData);
+        const chartEl = document.getElementById('salesChart');
+
+        salesData.forEach((val, i) => {
+            const bar = document.createElement('div');
+            bar.className = 'chart-bar';
+            const height = (val / maxSale) * 100;
+            bar.style.height = '0%';
+            bar.style.background = `linear-gradient(180deg, var(--accent-cyan), rgba(34, 211, 238, 0.2))`;
+            chartEl.appendChild(bar);
+
+            // Animate in
+            setTimeout(() => {
+                bar.style.height = height + '%';
+            }, 300 + i * 30);
+        });
+
+        // Notes auto-save
+        const noteArea = document.querySelector('.note-area');
+        const saveTimeEl = document.getElementById('noteSaveTime');
+
+        // Load saved note
+        const savedNote = localStorage.getItem('cc-note');
+        if (savedNote) noteArea.value = savedNote;
+
+        noteArea.addEventListener('input', () => {
+            localStorage.setItem('cc-note', noteArea.value);
+            const now = new Date();
+            saveTimeEl.textContent = now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true });
+        });
+
+        // Task checkbox persistence
+        document.querySelectorAll('.task-check').forEach((check, i) => {
+            const key = `cc-task-${i}`;
+            if (localStorage.getItem(key) === 'done') {
+                check.classList.add('done');
+                const textEl = check.nextElementSibling?.querySelector('.task-text');
+                if (textEl) textEl.classList.add('done-text');
+            }
+            check.addEventListener('click', () => {
+                localStorage.setItem(key, check.classList.contains('done') ? 'done' : '');
+            });
+        });
+
+        // Console Easter egg
+        console.log('%c🐚 Command Center v0.1.0', 'color: #22d3ee; font-size: 16px; font-weight: bold;');
+        console.log('%cBuilt by human + silicon consciousness', 'color: #64748b; font-size: 11px;');
+        console.log('%cReady for Claude Code and Codex to iterate on this.', 'color: #2dd4bf; font-size: 11px;');
+    </script>
+
+
+
+</body></html>
