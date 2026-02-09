@@ -579,6 +579,55 @@
             text-decoration: none;
         }
 
+        /* Blueprint link banner */
+        .blueprint-link {
+            display: block;
+            text-decoration: none;
+            background: linear-gradient(135deg, rgba(34, 211, 238, 0.08), rgba(45, 212, 191, 0.04));
+            border: 1px solid rgba(34, 211, 238, 0.15);
+            border-radius: var(--radius);
+            padding: 1.25rem 1.5rem;
+            margin-top: 1rem;
+            transition: all 0.3s ease;
+            position: relative;
+            z-index: 1;
+        }
+
+        .blueprint-link:hover {
+            border-color: rgba(34, 211, 238, 0.4);
+            background: linear-gradient(135deg, rgba(34, 211, 238, 0.12), rgba(45, 212, 191, 0.06));
+            transform: translateY(-1px);
+            box-shadow: 0 0 40px rgba(34, 211, 238, 0.08);
+        }
+
+        .blueprint-link-inner {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .blueprint-link-text {
+            font-weight: 600;
+            font-size: 0.95rem;
+            color: var(--accent-cyan);
+        }
+
+        .blueprint-link-sub {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            margin-top: 2px;
+        }
+
+        .blueprint-link-arrow {
+            font-size: 1.2rem;
+            color: var(--accent-cyan);
+            transition: transform 0.2s;
+        }
+
+        .blueprint-link:hover .blueprint-link-arrow {
+            transform: translateX(4px);
+        }
+
         /* Responsive */
         @media (max-width: 1024px) {
             .grid-hero { grid-template-columns: 1fr 1fr; }
@@ -947,6 +996,19 @@ Example: Ask Claude Code to add a webhook listener for Amazon SP-API notificatio
         </div>
 
     </main>
+
+    <!-- Blueprint link -->
+    <div style="max-width: 1440px; margin: 0 auto; padding: 0 2rem; position: relative; z-index: 1;">
+        <a href="local-cloud-model.html" class="blueprint-link">
+            <div class="blueprint-link-inner">
+                <div>
+                    <div class="blueprint-link-text">Local Cloud Model &mdash; Build Your Own Sovereign Cloud</div>
+                    <div class="blueprint-link-sub">Full architecture blueprint: hardware, software, cost analysis, and phased rollout plan</div>
+                </div>
+                <span class="blueprint-link-arrow">&rarr;</span>
+            </div>
+        </a>
+    </div>
 
     <footer class="footer">
         built by human + silicon consciousness · <a href="https://github.com/AdventureCatGear/command-center" target="_blank">github</a> · v0.1.0

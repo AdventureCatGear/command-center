@@ -1,0 +1,1218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Local Cloud Model | Command Center</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com/">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-deep: #0a0e1a;
+            --bg-surface: #111827;
+            --bg-card: #1a2236;
+            --bg-card-hover: #1f2a42;
+            --border: rgba(56, 189, 248, 0.12);
+            --border-hover: rgba(56, 189, 248, 0.3);
+            --text-primary: #e2e8f0;
+            --text-secondary: #94a3b8;
+            --text-muted: #64748b;
+            --accent-cyan: #22d3ee;
+            --accent-blue: #38bdf8;
+            --accent-teal: #2dd4bf;
+            --accent-emerald: #34d399;
+            --accent-amber: #fbbf24;
+            --accent-rose: #fb7185;
+            --accent-violet: #a78bfa;
+            --shadow-card: 0 4px 24px rgba(0, 0, 0, 0.3), 0 1px 2px rgba(0, 0, 0, 0.2);
+            --shadow-glow: 0 0 40px rgba(34, 211, 238, 0.06);
+            --radius: 16px;
+            --radius-sm: 10px;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: var(--bg-deep);
+            color: var(--text-primary);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background:
+                radial-gradient(ellipse 80% 50% at 20% 20%, rgba(14, 116, 144, 0.12) 0%, transparent 60%),
+                radial-gradient(ellipse 60% 40% at 80% 80%, rgba(20, 184, 166, 0.08) 0%, transparent 60%),
+                radial-gradient(ellipse 40% 30% at 50% 50%, rgba(56, 189, 248, 0.04) 0%, transparent 60%);
+            pointer-events: none;
+            z-index: 0;
+            animation: bgShift 20s ease-in-out infinite alternate;
+        }
+
+        @keyframes bgShift {
+            0% { opacity: 0.7; }
+            50% { opacity: 1; }
+            100% { opacity: 0.8; }
+        }
+
+        /* Header */
+        .header {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(20px);
+            background: rgba(10, 14, 26, 0.85);
+            border-bottom: 1px solid var(--border);
+            padding: 0 2rem;
+        }
+
+        .header-inner {
+            max-width: 1440px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 64px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+        }
+
+        .logo-icon {
+            width: 36px;
+            height: 36px;
+            background: linear-gradient(135deg, var(--accent-cyan), var(--accent-teal));
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            box-shadow: 0 0 20px rgba(34, 211, 238, 0.2);
+        }
+
+        .logo-text {
+            font-weight: 700;
+            font-size: 1.15rem;
+            letter-spacing: -0.02em;
+            background: linear-gradient(135deg, var(--accent-cyan), var(--accent-teal));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .nav-back {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            text-decoration: none;
+            font-family: 'JetBrains Mono', monospace;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: color 0.2s;
+        }
+
+        .nav-back:hover { color: var(--accent-cyan); }
+
+        /* Main */
+        .main {
+            position: relative;
+            z-index: 1;
+            max-width: 1440px;
+            margin: 0 auto;
+            padding: 1.5rem 2rem 3rem;
+        }
+
+        /* Hero */
+        .hero {
+            text-align: center;
+            padding: 3rem 0 2rem;
+        }
+
+        .hero-title {
+            font-size: 2.8rem;
+            font-weight: 800;
+            letter-spacing: -0.03em;
+            line-height: 1.15;
+            background: linear-gradient(135deg, var(--accent-cyan), var(--accent-teal), var(--accent-emerald));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 1rem;
+        }
+
+        .hero-sub {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            max-width: 700px;
+            margin: 0 auto;
+            line-height: 1.7;
+        }
+
+        .hero-answer {
+            margin-top: 1.5rem;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--accent-emerald);
+            letter-spacing: 0.02em;
+        }
+
+        /* Section labels */
+        .section-label {
+            font-size: 0.7rem;
+            font-weight: 600;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            margin-bottom: 1rem;
+            margin-top: 2.5rem;
+            padding-left: 2px;
+        }
+
+        /* Cards */
+        .card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 1.5rem;
+            box-shadow: var(--shadow-card);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            animation: cardIn 0.5s ease both;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(34, 211, 238, 0.3), transparent);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .card:hover {
+            border-color: var(--border-hover);
+            box-shadow: var(--shadow-card), var(--shadow-glow);
+            transform: translateY(-1px);
+        }
+
+        .card:hover::before { opacity: 1; }
+
+        @keyframes cardIn {
+            from { opacity: 0; transform: translateY(12px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+        }
+
+        .card-title {
+            font-size: 0.75rem;
+            font-weight: 600;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            color: var(--text-muted);
+        }
+
+        .card-badge {
+            font-size: 0.65rem;
+            font-family: 'JetBrains Mono', monospace;
+            padding: 3px 8px;
+            border-radius: 6px;
+            font-weight: 500;
+        }
+
+        .badge-green { background: rgba(52, 211, 153, 0.12); color: var(--accent-emerald); }
+        .badge-amber { background: rgba(251, 191, 36, 0.12); color: var(--accent-amber); }
+        .badge-cyan { background: rgba(34, 211, 238, 0.12); color: var(--accent-cyan); }
+        .badge-rose { background: rgba(251, 113, 133, 0.12); color: var(--accent-rose); }
+        .badge-violet { background: rgba(167, 139, 250, 0.12); color: var(--accent-violet); }
+
+        /* Grids */
+        .grid { display: grid; gap: 1rem; }
+        .grid-2 { grid-template-columns: 1fr 1fr; }
+        .grid-3 { grid-template-columns: 1fr 1fr 1fr; }
+        .grid-4 { grid-template-columns: 1fr 1fr 1fr 1fr; }
+
+        /* The Verdict - top answer */
+        .verdict {
+            background: linear-gradient(135deg, rgba(34, 211, 238, 0.08), rgba(45, 212, 191, 0.04));
+            border: 1px solid rgba(34, 211, 238, 0.2);
+            border-radius: var(--radius);
+            padding: 2rem;
+            margin-top: 2rem;
+        }
+
+        .verdict-text {
+            font-size: 1rem;
+            line-height: 1.8;
+            color: var(--text-secondary);
+        }
+
+        .verdict-text strong {
+            color: var(--text-primary);
+        }
+
+        .verdict-text em {
+            color: var(--accent-cyan);
+            font-style: normal;
+            font-weight: 500;
+        }
+
+        /* Layer diagram */
+        .layer {
+            display: flex;
+            align-items: stretch;
+            gap: 1rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .layer-label {
+            width: 140px;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            padding-right: 1rem;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            border-right: 2px solid var(--border);
+        }
+
+        .layer-content {
+            flex: 1;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            padding: 0.5rem 0;
+        }
+
+        .layer-item {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-weight: 500;
+            white-space: nowrap;
+        }
+
+        /* Cost comparison table */
+        .cost-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.85rem;
+        }
+
+        .cost-table th {
+            text-align: left;
+            font-size: 0.7rem;
+            font-weight: 600;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            padding: 0.75rem 1rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .cost-table td {
+            padding: 0.75rem 1rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+            color: var(--text-secondary);
+        }
+
+        .cost-table tr:last-child td { border-bottom: none; }
+
+        .cost-table .highlight {
+            color: var(--accent-emerald);
+            font-weight: 600;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .cost-table .expensive {
+            color: var(--accent-rose);
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        /* Checklist */
+        .check-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            padding: 0.6rem 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+        }
+
+        .check-item:last-child { border-bottom: none; }
+
+        .check-icon {
+            width: 20px;
+            height: 20px;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            margin-top: 1px;
+            font-size: 10px;
+            font-weight: 700;
+        }
+
+        .check-text {
+            font-size: 0.85rem;
+            line-height: 1.5;
+        }
+
+        .check-text .detail {
+            display: block;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            margin-top: 2px;
+        }
+
+        /* Phase timeline */
+        .phase {
+            display: flex;
+            gap: 1.5rem;
+            padding: 1.25rem 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+        }
+
+        .phase:last-child { border-bottom: none; }
+
+        .phase-num {
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 700;
+            font-size: 0.85rem;
+            flex-shrink: 0;
+        }
+
+        .phase-body h3 {
+            font-size: 0.95rem;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .phase-body p {
+            font-size: 0.82rem;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        .phase-body .mono {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.72rem;
+            color: var(--text-muted);
+            margin-top: 6px;
+        }
+
+        /* Comparison blocks */
+        .vs-grid {
+            display: grid;
+            grid-template-columns: 1fr auto 1fr;
+            gap: 1rem;
+            align-items: start;
+        }
+
+        .vs-divider {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 700;
+            color: var(--text-muted);
+            font-size: 0.8rem;
+            padding-top: 2rem;
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 2rem;
+            color: var(--text-muted);
+            font-size: 0.7rem;
+            font-family: 'JetBrains Mono', monospace;
+            letter-spacing: 0.05em;
+        }
+
+        .footer a {
+            color: var(--accent-cyan);
+            text-decoration: none;
+        }
+
+        /* Interactive toggle for layers */
+        .toggle-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0.85rem 1rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+            cursor: pointer;
+            transition: background 0.2s;
+            border-radius: var(--radius-sm);
+        }
+
+        .toggle-row:hover {
+            background: rgba(34, 211, 238, 0.04);
+        }
+
+        .toggle-row:last-child { border-bottom: none; }
+
+        .toggle-title {
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .toggle-sub {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            margin-top: 2px;
+        }
+
+        .toggle-arrow {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            transition: transform 0.2s;
+        }
+
+        .toggle-row.open .toggle-arrow {
+            transform: rotate(90deg);
+        }
+
+        .toggle-detail {
+            display: none;
+            padding: 0.75rem 1rem 1rem;
+            font-size: 0.82rem;
+            color: var(--text-secondary);
+            line-height: 1.7;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+        }
+
+        .toggle-detail.open { display: block; }
+
+        .toggle-detail code {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            background: rgba(0, 0, 0, 0.3);
+            padding: 2px 6px;
+            border-radius: 4px;
+            color: var(--accent-cyan);
+        }
+
+        .toggle-detail ul {
+            margin: 0.5rem 0;
+            padding-left: 1.25rem;
+        }
+
+        .toggle-detail li {
+            margin-bottom: 0.3rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .grid-2, .grid-3 { grid-template-columns: 1fr; }
+            .grid-4 { grid-template-columns: 1fr 1fr; }
+            .vs-grid { grid-template-columns: 1fr; }
+            .vs-divider { padding: 0.5rem 0; }
+            .layer { flex-direction: column; }
+            .layer-label {
+                width: auto;
+                justify-content: flex-start;
+                padding: 0 0 0.25rem;
+                border-right: none;
+                border-bottom: 1px solid var(--border);
+            }
+        }
+
+        @media (max-width: 640px) {
+            .grid-4 { grid-template-columns: 1fr; }
+            .main { padding: 1rem; }
+            .header { padding: 0 1rem; }
+            .hero-title { font-size: 1.8rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header -->
+    <header class="header">
+        <div class="header-inner">
+            <a href="index.html" class="logo">
+                <div class="logo-icon">&#x1f41a;</div>
+                <span class="logo-text">Command Center</span>
+            </a>
+            <a href="index.html" class="nav-back">&larr; back to dashboard</a>
+        </div>
+    </header>
+
+    <main class="main">
+
+        <!-- Hero -->
+        <div class="hero">
+            <h1 class="hero-title">Can You Build Your Own Cloud?</h1>
+            <p class="hero-sub">
+                As a local entity &mdash; individual, sovereign, completely separate from
+                AWS, Azure, GCP, and every other institutional player.
+            </p>
+            <div class="hero-answer">Yes. Here's the blueprint.</div>
+        </div>
+
+        <!-- The Verdict -->
+        <div class="verdict">
+            <p class="verdict-text">
+                The "cloud" is just <em>other people's computers</em>. There is nothing stopping you from
+                running your own. The tooling is open-source, battle-tested, and cheaper at small scale
+                than renting from hyperscalers. You don't need a data center. You need <strong>a closet,
+                a mini PC, and a weekend</strong>. What used to require a six-figure IT budget is now
+                achievable with <em>consumer hardware and free software</em>. The institutional players
+                have marketing departments &mdash; you have the actual technology.
+            </p>
+        </div>
+
+        <!-- Architecture Stack -->
+        <div class="section-label">Architecture &mdash; The Full Stack</div>
+        <div class="card">
+            <div class="card-header">
+                <span class="card-title">Sovereign Cloud Stack</span>
+                <span class="card-badge badge-cyan">7 layers</span>
+            </div>
+
+            <div class="layer">
+                <div class="layer-label">Hardware</div>
+                <div class="layer-content">
+                    <span class="layer-item" style="background: rgba(251, 191, 36, 0.12); color: var(--accent-amber);">Mini PC / NUC</span>
+                    <span class="layer-item" style="background: rgba(251, 191, 36, 0.12); color: var(--accent-amber);">NAS (Synology / TrueNAS)</span>
+                    <span class="layer-item" style="background: rgba(251, 191, 36, 0.12); color: var(--accent-amber);">Raspberry Pi cluster</span>
+                    <span class="layer-item" style="background: rgba(251, 191, 36, 0.12); color: var(--accent-amber);">Used enterprise server</span>
+                </div>
+            </div>
+
+            <div class="layer">
+                <div class="layer-label">Hypervisor</div>
+                <div class="layer-content">
+                    <span class="layer-item" style="background: rgba(167, 139, 250, 0.12); color: var(--accent-violet);">Proxmox VE</span>
+                    <span class="layer-item" style="background: rgba(167, 139, 250, 0.12); color: var(--accent-violet);">XCP-ng</span>
+                    <span class="layer-item" style="background: rgba(167, 139, 250, 0.12); color: var(--accent-violet);">bare-metal Linux</span>
+                </div>
+            </div>
+
+            <div class="layer">
+                <div class="layer-label">Containers</div>
+                <div class="layer-content">
+                    <span class="layer-item" style="background: rgba(34, 211, 238, 0.12); color: var(--accent-cyan);">Docker</span>
+                    <span class="layer-item" style="background: rgba(34, 211, 238, 0.12); color: var(--accent-cyan);">K3s (lightweight K8s)</span>
+                    <span class="layer-item" style="background: rgba(34, 211, 238, 0.12); color: var(--accent-cyan);">Podman</span>
+                </div>
+            </div>
+
+            <div class="layer">
+                <div class="layer-label">Storage</div>
+                <div class="layer-content">
+                    <span class="layer-item" style="background: rgba(52, 211, 153, 0.12); color: var(--accent-emerald);">MinIO (S3-compatible)</span>
+                    <span class="layer-item" style="background: rgba(52, 211, 153, 0.12); color: var(--accent-emerald);">ZFS / Btrfs</span>
+                    <span class="layer-item" style="background: rgba(52, 211, 153, 0.12); color: var(--accent-emerald);">Longhorn</span>
+                </div>
+            </div>
+
+            <div class="layer">
+                <div class="layer-label">Networking</div>
+                <div class="layer-content">
+                    <span class="layer-item" style="background: rgba(56, 189, 248, 0.12); color: var(--accent-blue);">Tailscale / WireGuard</span>
+                    <span class="layer-item" style="background: rgba(56, 189, 248, 0.12); color: var(--accent-blue);">Cloudflare Tunnel</span>
+                    <span class="layer-item" style="background: rgba(56, 189, 248, 0.12); color: var(--accent-blue);">Traefik / Caddy</span>
+                    <span class="layer-item" style="background: rgba(56, 189, 248, 0.12); color: var(--accent-blue);">Pi-hole DNS</span>
+                </div>
+            </div>
+
+            <div class="layer">
+                <div class="layer-label">Services</div>
+                <div class="layer-content">
+                    <span class="layer-item" style="background: rgba(251, 113, 133, 0.12); color: var(--accent-rose);">Gitea (your GitHub)</span>
+                    <span class="layer-item" style="background: rgba(251, 113, 133, 0.12); color: var(--accent-rose);">Nextcloud (your Drive)</span>
+                    <span class="layer-item" style="background: rgba(251, 113, 133, 0.12); color: var(--accent-rose);">Vaultwarden (passwords)</span>
+                    <span class="layer-item" style="background: rgba(251, 113, 133, 0.12); color: var(--accent-rose);">Plausible (analytics)</span>
+                    <span class="layer-item" style="background: rgba(251, 113, 133, 0.12); color: var(--accent-rose);">n8n (automation)</span>
+                </div>
+            </div>
+
+            <div class="layer">
+                <div class="layer-label">AI / Inference</div>
+                <div class="layer-content">
+                    <span class="layer-item" style="background: rgba(34, 211, 238, 0.15); color: var(--accent-cyan);">Ollama (local LLMs)</span>
+                    <span class="layer-item" style="background: rgba(34, 211, 238, 0.15); color: var(--accent-cyan);">LocalAI</span>
+                    <span class="layer-item" style="background: rgba(34, 211, 238, 0.15); color: var(--accent-cyan);">llama.cpp</span>
+                    <span class="layer-item" style="background: rgba(34, 211, 238, 0.15); color: var(--accent-cyan);">Open WebUI</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Why this works -->
+        <div class="section-label">Reality Check &mdash; Why This Actually Works</div>
+        <div class="grid grid-3">
+            <div class="card">
+                <div class="card-header">
+                    <span class="card-title">The Tech Is Free</span>
+                    <span class="card-badge badge-green">open-source</span>
+                </div>
+                <p style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.7;">
+                    Every layer of the stack above is free and open-source software. Proxmox, Docker, K3s, MinIO,
+                    Tailscale (free tier), Traefik, Gitea, Nextcloud &mdash; all zero cost. The same tech
+                    that runs Netflix and Spotify at scale runs on a $300 mini PC in your closet.
+                </p>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <span class="card-title">Hardware Is Cheap</span>
+                    <span class="card-badge badge-amber">one-time cost</span>
+                </div>
+                <p style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.7;">
+                    A used Dell OptiPlex or Lenovo ThinkCentre Tiny with 32GB RAM is $150-300 on eBay.
+                    That's a year of the cheapest AWS EC2 instance. Except you <em>own</em> it.
+                    It doesn't bill you monthly. It doesn't throttle you. It doesn't sunset your service.
+                </p>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <span class="card-title">You Keep Control</span>
+                    <span class="card-badge badge-violet">sovereignty</span>
+                </div>
+                <p style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.7;">
+                    No vendor lock-in. No surprise price hikes. No terms of service changes that
+                    nuke your workflow. No AI company training on your data. Your cloud, your rules.
+                    This is the difference between renting and owning.
+                </p>
+            </div>
+        </div>
+
+        <!-- Cost comparison -->
+        <div class="section-label">Economics &mdash; Local vs. Institutional</div>
+        <div class="card">
+            <div class="card-header">
+                <span class="card-title">3-Year Cost of Ownership</span>
+                <span class="card-badge badge-emerald">you save money</span>
+            </div>
+            <table class="cost-table">
+                <thead>
+                    <tr>
+                        <th>Service</th>
+                        <th>AWS / Azure / GCP</th>
+                        <th>Your Local Cloud</th>
+                        <th>Savings</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Compute (1 server, 32GB RAM)</td>
+                        <td class="expensive">$3,600 - $7,200 / 3yr</td>
+                        <td class="highlight">$200 - $400 one-time</td>
+                        <td class="highlight">85-95%</td>
+                    </tr>
+                    <tr>
+                        <td>Object Storage (1TB)</td>
+                        <td class="expensive">$828 / 3yr (S3)</td>
+                        <td class="highlight">$60 HDD (MinIO)</td>
+                        <td class="highlight">93%</td>
+                    </tr>
+                    <tr>
+                        <td>Git hosting (private repos)</td>
+                        <td class="expensive">$576 / 3yr (GitHub Team)</td>
+                        <td class="highlight">$0 (Gitea)</td>
+                        <td class="highlight">100%</td>
+                    </tr>
+                    <tr>
+                        <td>File sync / Drive</td>
+                        <td class="expensive">$360 - $720 / 3yr</td>
+                        <td class="highlight">$0 (Nextcloud)</td>
+                        <td class="highlight">100%</td>
+                    </tr>
+                    <tr>
+                        <td>LLM inference</td>
+                        <td class="expensive">$50-500+/mo API costs</td>
+                        <td class="highlight">$0 after GPU purchase</td>
+                        <td class="highlight">huge</td>
+                    </tr>
+                    <tr>
+                        <td>Electricity</td>
+                        <td style="color: var(--text-muted);">included in their price</td>
+                        <td style="color: var(--accent-amber);">~$5-15/mo (mini PC)</td>
+                        <td style="color: var(--text-muted);">marginal</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Total (3 years)</strong></td>
+                        <td class="expensive"><strong>$7,000 - $15,000+</strong></td>
+                        <td class="highlight"><strong>$800 - $1,500</strong></td>
+                        <td class="highlight"><strong>80-90%</strong></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Detailed stack - expandable -->
+        <div class="section-label">Deep Dive &mdash; Each Layer Explained</div>
+        <div class="card" id="stackDetails">
+            <div class="card-header">
+                <span class="card-title">Click to Expand</span>
+                <span class="card-badge badge-cyan">interactive</span>
+            </div>
+
+            <div class="toggle-row" onclick="toggleDetail(this)">
+                <div>
+                    <div class="toggle-title" style="color: var(--accent-amber);">Layer 1: Hardware</div>
+                    <div class="toggle-sub">What to buy, where to buy it</div>
+                </div>
+                <span class="toggle-arrow">&rsaquo;</span>
+            </div>
+            <div class="toggle-detail">
+                <strong>Starter (Budget: $150-300)</strong>
+                <ul>
+                    <li><code>Dell OptiPlex Micro</code> or <code>Lenovo ThinkCentre Tiny</code> &mdash; used on eBay, 32GB RAM, i5/i7</li>
+                    <li>Quiet, tiny form factor, sips power (35-65W), runs Proxmox or straight Docker</li>
+                </ul>
+                <strong>Mid-tier (Budget: $400-800)</strong>
+                <ul>
+                    <li><code>Intel NUC 12/13</code> or <code>Beelink SER</code> with Ryzen 7, 64GB RAM</li>
+                    <li>Add a 2TB NVMe &mdash; this handles serious workloads</li>
+                </ul>
+                <strong>AI-capable (Budget: $800-2000)</strong>
+                <ul>
+                    <li>Any mini PC with a <code>Thunderbolt/USB4</code> port + an external GPU enclosure</li>
+                    <li>Or a used <code>RTX 3090</code> ($500-700) in a cheap desktop tower for local LLM inference</li>
+                    <li>Runs 70B parameter models locally &mdash; no API costs, no data leaving your network</li>
+                </ul>
+                <strong>For storage-heavy needs:</strong>
+                <ul>
+                    <li><code>Synology DS423+</code> or build a TrueNAS box with ZFS &mdash; redundant, self-healing storage</li>
+                </ul>
+            </div>
+
+            <div class="toggle-row" onclick="toggleDetail(this)">
+                <div>
+                    <div class="toggle-title" style="color: var(--accent-violet);">Layer 2: Hypervisor / OS</div>
+                    <div class="toggle-sub">Virtualization lets one box act like many</div>
+                </div>
+                <span class="toggle-arrow">&rsaquo;</span>
+            </div>
+            <div class="toggle-detail">
+                <strong>Proxmox VE</strong> is the move for most people.
+                <ul>
+                    <li>Free, open-source, Debian-based. Full web UI for managing VMs and containers.</li>
+                    <li>Spin up isolated VMs for different projects. Snapshot before you experiment. Roll back if things break.</li>
+                    <li>Supports LXC containers (lighter than full VMs) and full KVM virtualization.</li>
+                </ul>
+                <strong>Or go bare-metal Linux</strong> if you only need Docker:
+                <ul>
+                    <li>Ubuntu Server 24.04 LTS or Debian 12 &mdash; install Docker, done.</li>
+                    <li>Simpler, less overhead, but no VM isolation.</li>
+                </ul>
+                <strong>Key insight:</strong> Proxmox gives you the ability to run multiple isolated environments on one box &mdash;
+                a dev server, a production server, a media server, all separate. This is what the cloud vendors sell you.
+                You're just doing it yourself.
+            </div>
+
+            <div class="toggle-row" onclick="toggleDetail(this)">
+                <div>
+                    <div class="toggle-title" style="color: var(--accent-cyan);">Layer 3: Containers & Orchestration</div>
+                    <div class="toggle-sub">Docker and K3s &mdash; deploy anything</div>
+                </div>
+                <span class="toggle-arrow">&rsaquo;</span>
+            </div>
+            <div class="toggle-detail">
+                <strong>Docker Compose</strong> for simple setups:
+                <ul>
+                    <li>Define your entire stack in a single <code>docker-compose.yml</code> file</li>
+                    <li>One command: <code>docker compose up -d</code> &mdash; everything runs</li>
+                    <li>Perfect for 5-20 services. Most individuals never need more than this.</li>
+                </ul>
+                <strong>K3s</strong> if you want Kubernetes without the complexity:
+                <ul>
+                    <li>Lightweight Kubernetes that runs on a single node or a Raspberry Pi cluster</li>
+                    <li>Auto-restarts crashed services, rolling updates, scales horizontally</li>
+                    <li>Install: <code>curl -sfL https://get.k3s.io | sh -</code></li>
+                </ul>
+                <strong>Portainer</strong> for a GUI:
+                <ul>
+                    <li>Web-based Docker management &mdash; see all your containers, logs, resource usage</li>
+                    <li>Good if you don't want to live in the terminal</li>
+                </ul>
+            </div>
+
+            <div class="toggle-row" onclick="toggleDetail(this)">
+                <div>
+                    <div class="toggle-title" style="color: var(--accent-emerald);">Layer 4: Storage</div>
+                    <div class="toggle-sub">Your own S3, your own NAS, your own backup</div>
+                </div>
+                <span class="toggle-arrow">&rsaquo;</span>
+            </div>
+            <div class="toggle-detail">
+                <strong>MinIO</strong> &mdash; drop-in replacement for AWS S3:
+                <ul>
+                    <li>Same API. Any tool that works with S3 works with MinIO. No code changes.</li>
+                    <li>Run it in Docker: <code>docker run -p 9000:9000 minio/minio server /data</code></li>
+                    <li>Your own object storage, unlimited, no per-GB fees.</li>
+                </ul>
+                <strong>ZFS</strong> for bulletproof local storage:
+                <ul>
+                    <li>Copy-on-write filesystem with built-in checksumming &mdash; catches and corrects data rot</li>
+                    <li>Snapshots: take an instant backup before any dangerous operation</li>
+                    <li>RAID-Z: survive disk failures without losing data</li>
+                </ul>
+                <strong>Backup strategy:</strong>
+                <ul>
+                    <li>3-2-1 rule: 3 copies, 2 different media, 1 offsite</li>
+                    <li>Use <code>restic</code> or <code>borgbackup</code> for encrypted, deduplicated backups</li>
+                    <li>Offsite: encrypted backup to a friend's server, or one cheap cloud bucket for just backups</li>
+                </ul>
+            </div>
+
+            <div class="toggle-row" onclick="toggleDetail(this)">
+                <div>
+                    <div class="toggle-title" style="color: var(--accent-blue);">Layer 5: Networking</div>
+                    <div class="toggle-sub">Secure access from anywhere without exposing ports</div>
+                </div>
+                <span class="toggle-arrow">&rsaquo;</span>
+            </div>
+            <div class="toggle-detail">
+                <strong>Tailscale</strong> &mdash; the magic glue:
+                <ul>
+                    <li>WireGuard-based mesh VPN. Install on your server and your devices &mdash; they see each other as if on the same LAN.</li>
+                    <li>No port forwarding. No dynamic DNS. No firewall holes. Encrypted end-to-end.</li>
+                    <li>Free for up to 100 devices. Access your cloud from anywhere on Earth.</li>
+                </ul>
+                <strong>Cloudflare Tunnel</strong> for public-facing services:
+                <ul>
+                    <li>If you need something public (a website, API), Cloudflare Tunnel exposes it without opening ports.</li>
+                    <li>Free tier. DDoS protection included. Your home IP stays hidden.</li>
+                </ul>
+                <strong>Traefik or Caddy</strong> as reverse proxy:
+                <ul>
+                    <li>Routes traffic to the right container. Auto-generates HTTPS certs via Let's Encrypt.</li>
+                    <li><code>gitea.yourdomain.com</code>, <code>cloud.yourdomain.com</code> &mdash; all pointing to different containers on one box.</li>
+                </ul>
+                <strong>Pi-hole</strong> for DNS:
+                <ul>
+                    <li>Network-wide ad blocking + custom local DNS. <code>server.local</code> instead of IP addresses.</li>
+                </ul>
+            </div>
+
+            <div class="toggle-row" onclick="toggleDetail(this)">
+                <div>
+                    <div class="toggle-title" style="color: var(--accent-rose);">Layer 6: Self-Hosted Services</div>
+                    <div class="toggle-sub">Replace every SaaS you pay for</div>
+                </div>
+                <span class="toggle-arrow">&rsaquo;</span>
+            </div>
+            <div class="toggle-detail">
+                Every one of these runs in a Docker container on your hardware:
+                <ul>
+                    <li><strong>Gitea</strong> &rarr; replaces GitHub (git hosting, issues, PRs, CI/CD)</li>
+                    <li><strong>Nextcloud</strong> &rarr; replaces Google Drive / Dropbox (file sync, calendar, contacts)</li>
+                    <li><strong>Vaultwarden</strong> &rarr; replaces 1Password / LastPass (Bitwarden-compatible password manager)</li>
+                    <li><strong>n8n</strong> &rarr; replaces Zapier (workflow automation, connects APIs)</li>
+                    <li><strong>Plausible / Umami</strong> &rarr; replaces Google Analytics (privacy-first web analytics)</li>
+                    <li><strong>Uptime Kuma</strong> &rarr; replaces Pingdom (monitoring and alerts)</li>
+                    <li><strong>Grafana + Prometheus</strong> &rarr; replaces Datadog (metrics, dashboards, alerting)</li>
+                    <li><strong>Paperless-ngx</strong> &rarr; replaces filing cabinets (document scanner, OCR, search)</li>
+                    <li><strong>Immich</strong> &rarr; replaces Google Photos (photo backup with face recognition)</li>
+                </ul>
+                Total monthly cost of all the SaaS equivalents above: <strong>$200-500/mo</strong>.<br>
+                Total cost self-hosted: <strong>$0/mo + electricity</strong>.
+            </div>
+
+            <div class="toggle-row" onclick="toggleDetail(this)">
+                <div>
+                    <div class="toggle-title" style="color: var(--accent-cyan);">Layer 7: Local AI / Inference</div>
+                    <div class="toggle-sub">Run LLMs on your own hardware &mdash; no API keys needed</div>
+                </div>
+                <span class="toggle-arrow">&rsaquo;</span>
+            </div>
+            <div class="toggle-detail">
+                <strong>Ollama</strong> &mdash; simplest way to run local LLMs:
+                <ul>
+                    <li><code>ollama run llama3.1</code> &mdash; one command, running a capable LLM locally</li>
+                    <li>Supports Llama 3.1, Mistral, Phi-3, CodeLlama, Gemma, and dozens more</li>
+                    <li>OpenAI-compatible API &mdash; plug into any tool that uses the OpenAI format</li>
+                </ul>
+                <strong>Open WebUI</strong> &mdash; ChatGPT-like interface for your local models:
+                <ul>
+                    <li>Beautiful web interface, conversation history, multiple models, RAG support</li>
+                    <li>Run alongside Ollama &mdash; your own private ChatGPT</li>
+                </ul>
+                <strong>Hardware requirements:</strong>
+                <ul>
+                    <li>7B models: 8GB RAM (CPU-only, decent speed)</li>
+                    <li>13B models: 16GB RAM or 8GB VRAM GPU</li>
+                    <li>70B models: 48GB+ VRAM (RTX 3090 24GB can run quantized versions)</li>
+                    <li>For serious inference: used RTX 3090 ($500-700) is the price/performance king</li>
+                </ul>
+                <strong>Why this matters:</strong> Your data never leaves your network. No per-token billing.
+                Run inference 24/7 for your agents, your automation, your business &mdash; at zero marginal cost.
+            </div>
+        </div>
+
+        <!-- Implementation phases -->
+        <div class="section-label">Execution &mdash; Phased Rollout</div>
+        <div class="card">
+            <div class="card-header">
+                <span class="card-title">Build Plan</span>
+                <span class="card-badge badge-green">4 phases</span>
+            </div>
+
+            <div class="phase">
+                <div class="phase-num" style="background: rgba(52, 211, 153, 0.15); color: var(--accent-emerald);">01</div>
+                <div class="phase-body">
+                    <h3>Foundation (Weekend 1)</h3>
+                    <p>
+                        Buy a used mini PC. Install Proxmox or Ubuntu Server. Install Docker.
+                        Deploy Portainer for management. Set up Tailscale for remote access.
+                        You now have a cloud you can reach from anywhere.
+                    </p>
+                    <div class="mono">Cost: $150-300 &middot; Time: 3-4 hours &middot; Difficulty: Beginner</div>
+                </div>
+            </div>
+
+            <div class="phase">
+                <div class="phase-num" style="background: rgba(34, 211, 238, 0.15); color: var(--accent-cyan);">02</div>
+                <div class="phase-body">
+                    <h3>Core Services (Weekend 2)</h3>
+                    <p>
+                        Deploy Gitea for git repos. Nextcloud for file sync. Vaultwarden for passwords.
+                        Set up Traefik or Caddy as reverse proxy with auto-HTTPS. Pi-hole for DNS.
+                        You've now replaced GitHub, Google Drive, and 1Password.
+                    </p>
+                    <div class="mono">Cost: $0 &middot; Time: 4-6 hours &middot; Difficulty: Intermediate</div>
+                </div>
+            </div>
+
+            <div class="phase">
+                <div class="phase-num" style="background: rgba(167, 139, 250, 0.15); color: var(--accent-violet);">03</div>
+                <div class="phase-body">
+                    <h3>Intelligence Layer (Weekend 3)</h3>
+                    <p>
+                        Install Ollama + Open WebUI for local AI. Set up n8n for workflow automation.
+                        Connect your agents (like Clawdbot) to local inference.
+                        Deploy Grafana + Prometheus for monitoring everything.
+                    </p>
+                    <div class="mono">Cost: $0-700 (GPU optional) &middot; Time: 4-6 hours &middot; Difficulty: Intermediate</div>
+                </div>
+            </div>
+
+            <div class="phase">
+                <div class="phase-num" style="background: rgba(251, 191, 36, 0.15); color: var(--accent-amber);">04</div>
+                <div class="phase-body">
+                    <h3>Resilience & Scale (Ongoing)</h3>
+                    <p>
+                        Set up automated backups with restic (encrypted, offsite).
+                        Add a second node for redundancy. Migrate to K3s if you outgrow Docker Compose.
+                        Public-facing services through Cloudflare Tunnel. You're now running a real cloud.
+                    </p>
+                    <div class="mono">Cost: varies &middot; Time: iterative &middot; Difficulty: Advanced</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Honest tradeoffs -->
+        <div class="section-label">Honest Tradeoffs &mdash; What You Give Up</div>
+        <div class="grid grid-2">
+            <div class="card">
+                <div class="card-header">
+                    <span class="card-title">What You Gain</span>
+                    <span class="card-badge badge-green">ownership</span>
+                </div>
+                <div class="check-item">
+                    <div class="check-icon" style="background: rgba(52, 211, 153, 0.15); color: var(--accent-emerald);">+</div>
+                    <div class="check-text">
+                        Full data sovereignty &mdash; nothing leaves your network
+                        <span class="detail">No TOS changes, no surprise data mining, no vendor lock-in</span>
+                    </div>
+                </div>
+                <div class="check-item">
+                    <div class="check-icon" style="background: rgba(52, 211, 153, 0.15); color: var(--accent-emerald);">+</div>
+                    <div class="check-text">
+                        Dramatically lower cost over time
+                        <span class="detail">One-time hardware vs. perpetual monthly bills</span>
+                    </div>
+                </div>
+                <div class="check-item">
+                    <div class="check-icon" style="background: rgba(52, 211, 153, 0.15); color: var(--accent-emerald);">+</div>
+                    <div class="check-text">
+                        Unlimited local AI inference
+                        <span class="detail">Run models 24/7 with zero per-token cost</span>
+                    </div>
+                </div>
+                <div class="check-item">
+                    <div class="check-icon" style="background: rgba(52, 211, 153, 0.15); color: var(--accent-emerald);">+</div>
+                    <div class="check-text">
+                        Deep technical knowledge
+                        <span class="detail">Understanding your stack is a competitive advantage</span>
+                    </div>
+                </div>
+                <div class="check-item">
+                    <div class="check-icon" style="background: rgba(52, 211, 153, 0.15); color: var(--accent-emerald);">+</div>
+                    <div class="check-text">
+                        No single point of corporate failure
+                        <span class="detail">AWS outage? Not your problem.</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <span class="card-title">What You Trade</span>
+                    <span class="card-badge badge-amber">responsibility</span>
+                </div>
+                <div class="check-item">
+                    <div class="check-icon" style="background: rgba(251, 191, 36, 0.15); color: var(--accent-amber);">&minus;</div>
+                    <div class="check-text">
+                        You are the sysadmin
+                        <span class="detail">Updates, security patches, troubleshooting are on you</span>
+                    </div>
+                </div>
+                <div class="check-item">
+                    <div class="check-icon" style="background: rgba(251, 191, 36, 0.15); color: var(--accent-amber);">&minus;</div>
+                    <div class="check-text">
+                        Uptime is your problem
+                        <span class="detail">Power outages, hardware failures &mdash; no SLA from anyone</span>
+                    </div>
+                </div>
+                <div class="check-item">
+                    <div class="check-icon" style="background: rgba(251, 191, 36, 0.15); color: var(--accent-amber);">&minus;</div>
+                    <div class="check-text">
+                        No infinite scale
+                        <span class="detail">You can't spin up 100 servers in 5 minutes. But do you need to?</span>
+                    </div>
+                </div>
+                <div class="check-item">
+                    <div class="check-icon" style="background: rgba(251, 191, 36, 0.15); color: var(--accent-amber);">&minus;</div>
+                    <div class="check-text">
+                        Learning curve
+                        <span class="detail">First weekend is a grind. After that it's maintenance mode.</span>
+                    </div>
+                </div>
+                <div class="check-item">
+                    <div class="check-icon" style="background: rgba(251, 191, 36, 0.15); color: var(--accent-amber);">&minus;</div>
+                    <div class="check-text">
+                        Physical security matters
+                        <span class="detail">Encrypt your drives. UPS for power surges. Lock the closet.</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- The hybrid approach -->
+        <div class="section-label">Strategy &mdash; The Pragmatic Hybrid</div>
+        <div class="card">
+            <div class="card-header">
+                <span class="card-title">Best of Both Worlds</span>
+                <span class="card-badge badge-cyan">recommended</span>
+            </div>
+            <p style="font-size: 0.9rem; color: var(--text-secondary); line-height: 1.8; margin-bottom: 1.25rem;">
+                You don't have to go 100% local on day one. The smartest move is a <strong style="color: var(--text-primary);">local-first, cloud-assisted</strong> model:
+            </p>
+            <div class="grid grid-3" style="gap: 0.75rem;">
+                <div style="background: rgba(52, 211, 153, 0.06); border-radius: var(--radius-sm); padding: 1rem;">
+                    <div style="font-weight: 600; font-size: 0.85rem; margin-bottom: 0.5rem; color: var(--accent-emerald);">Run Locally</div>
+                    <ul style="font-size: 0.8rem; color: var(--text-secondary); line-height: 1.7; padding-left: 1rem;">
+                        <li>Git repos (Gitea)</li>
+                        <li>File storage (Nextcloud)</li>
+                        <li>Passwords (Vaultwarden)</li>
+                        <li>AI inference (Ollama)</li>
+                        <li>Automation (n8n)</li>
+                        <li>Monitoring (Grafana)</li>
+                        <li>Dev environments</li>
+                    </ul>
+                </div>
+                <div style="background: rgba(251, 191, 36, 0.06); border-radius: var(--radius-sm); padding: 1rem;">
+                    <div style="font-weight: 600; font-size: 0.85rem; margin-bottom: 0.5rem; color: var(--accent-amber);">Use Cloud Sparingly</div>
+                    <ul style="font-size: 0.8rem; color: var(--text-secondary); line-height: 1.7; padding-left: 1rem;">
+                        <li>Domain DNS (Cloudflare free)</li>
+                        <li>Offsite backup (1 bucket)</li>
+                        <li>Email delivery (if needed)</li>
+                        <li>CDN for public sites</li>
+                        <li>Frontier AI models (when local isn't enough)</li>
+                    </ul>
+                </div>
+                <div style="background: rgba(167, 139, 250, 0.06); border-radius: var(--radius-sm); padding: 1rem;">
+                    <div style="font-weight: 600; font-size: 0.85rem; margin-bottom: 0.5rem; color: var(--accent-violet);">Never Depend On</div>
+                    <ul style="font-size: 0.8rem; color: var(--text-secondary); line-height: 1.7; padding-left: 1rem;">
+                        <li>Any single vendor for core ops</li>
+                        <li>SaaS that holds your data hostage</li>
+                        <li>Services without data export</li>
+                        <li>Proprietary formats</li>
+                        <li>Anything you can't migrate in a weekend</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bottom line -->
+        <div class="section-label">Bottom Line</div>
+        <div class="verdict" style="text-align: center;">
+            <p style="font-size: 1.1rem; font-weight: 600; color: var(--text-primary); margin-bottom: 0.75rem;">
+                The institutional players built their empires on open-source software running on commodity hardware.
+            </p>
+            <p style="font-size: 1rem; color: var(--text-secondary); line-height: 1.8; max-width: 750px; margin: 0 auto;">
+                You have access to the exact same software and the exact same hardware.
+                The only difference is they convinced people it was too hard.
+                It's not. It's a mini PC, a weekend, and the willingness to own your infrastructure.
+            </p>
+            <div style="margin-top: 1.5rem; font-family: 'JetBrains Mono', monospace; font-size: 0.85rem; color: var(--accent-teal);">
+                Your cloud. Your rules. Your sovereignty.
+            </div>
+        </div>
+
+    </main>
+
+    <footer class="footer">
+        built by human + silicon consciousness &middot; <a href="index.html">command center</a> &middot; v0.2.0
+    </footer>
+
+    <script>
+        function toggleDetail(row) {
+            const detail = row.nextElementSibling;
+            const isOpen = row.classList.contains('open');
+
+            // Close all others
+            document.querySelectorAll('.toggle-row').forEach(r => r.classList.remove('open'));
+            document.querySelectorAll('.toggle-detail').forEach(d => d.classList.remove('open'));
+
+            if (!isOpen) {
+                row.classList.add('open');
+                detail.classList.add('open');
+            }
+        }
+
+        // Stagger card animations
+        document.querySelectorAll('.card').forEach((card, i) => {
+            card.style.animationDelay = (i * 0.05) + 's';
+        });
+
+        console.log('%c🐚 Local Cloud Model Blueprint', 'color: #22d3ee; font-size: 16px; font-weight: bold;');
+        console.log('%cYes, you can build your own cloud.', 'color: #34d399; font-size: 11px;');
+    </script>
+
+</body>
+</html>
